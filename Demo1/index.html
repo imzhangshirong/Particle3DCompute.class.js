@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html style="width:100%;height:100%">
+	<head>
+		<meta charset="utf-8">
+		<title>Particle3DCompute.class.js Demo1</title>
+		<meta description="Particle3DCompute.class.js Demo Create By Jarvis">
+		<script src="../Particle3DCompute.class.js"></script>
+		<script src="../jquery-1.8.3.min.js"></script>
+		<script>
+			pt=Particle3DCompute.createNew();
+			divpos=new Array();
+			divpos[0]=[0,0,0];
+			divpos[1]=[100,0,0];
+			divpos[2]=[-100,-150,200];
+			divpos[3]=[-80,100,280];
+			divpos[4]=[600,500,0];
+			eyePos=[600,0,0];
+			eyefocus=600;
+			view=[0,0];
+			$(function(){
+				$('body').mousemove(function(e) { 
+				var x = e.originalEvent.x || e.originalEvent.layerX || 0; 
+				var y = e.originalEvent.y || e.originalEvent.layerY || 0; 
+				view[0]=(x-$('body').width()/2)/($('body').width()/2)*10;
+				view[1]=(y-$('body').height()/2)/($('body').height()/2)*5;
+                //console.log(view);
+				drawn()
+				});
+			});
+			function drawn(){
+				for(i=0;i<divpos.length;i++){
+				temp=pt.thDims2twDims(divpos[i],eyePos,view,eyefocus);
+				z=parseInt(temp[1]);
+                    height0=$("#obj"+i.toString()).attr('height');
+                    width0=$("#obj"+i.toString()).attr('width');
+                    x0=Number($("#obj"+i.toString()).attr('x'));
+                    y0=Number($("#obj"+i.toString()).attr('y'));
+                    //console.log(x0,y0);
+				$("#obj"+i.toString()).css({width:width0*temp[2],height:height0*temp[2],"z-index":z});
+				x=$('body').width()/2+temp[0][0]-$('#obj'+i.toString()).width()/2+x0;
+				y=$('body').height()/2+temp[0][1]-$('#obj'+i.toString()).height()/2+y0;
+				$("#obj"+i.toString()).css({top:y,left:x});
+				//$("#obj"+i.toString()).text("x:"+temp[0][0]+"\ny:"+temp[0][1]);
+				}
+			}
+			$(function(){
+				$('body').on('mousewheel', function(event) {
+					//eyePos[0]+=event.deltaY*10;
+					//drawn();
+					//console.log(event.deltaX, event.deltaY, event.deltaFactor);
+				});
+			});
+		</script>
+		<style>
+			.obj{position:absolute;}
+		</style>
+	</head>
+	<body style="width:100%;height:100%;background-color:skyblue;overflow:hidden">
+		<p style="color:#fff"></p>
+		<div id="obj0" style=" " class="obj" width="325" height="115" x="0" y="180"><img src="3.png" width="100%" height="100%"></div>
+		<div id="obj1" style="" class="obj" width="244" height="300" x="20" y="20"><img src="2.png" width="90%" height="90%"></div>
+		<div id="obj2" style="" class="obj" width="127" height="54" x="0" y="0"><img src="1.png" width="80%" height="80%"></div>
+		<div id="obj3" style="" class="obj" width="127" height="54" x="0" y="0"><img src="1.png" width="100%" height="100%"></div>
+		<div id="obj4" style="background-color:white;" class="obj" width="100" height="100" x="0" y="0"></div>
+	</body>
+</html>
